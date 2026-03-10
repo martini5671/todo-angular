@@ -1,0 +1,21 @@
+.form-content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form-filed {
+  width: 90%;
+}
+
+.centered-header{
+  width: 100%;
+  text-align: center;
+}
+.login-container{
+  padding-top: 20px;
+  margin: auto;
+  width: 20%;
+  min-width: 190px;
+}

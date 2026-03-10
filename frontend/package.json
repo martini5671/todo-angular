@@ -1,8 +1,9 @@
 {
-  "name": "frontend",
+  "name": "login",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "generate": "openapi-generator-cli generate -i http://localhost:8080/v3/api-docs -g typescript-angular -o src/app/modules/openapi --additional-properties=fileNaming=kebab-case,withInterfaces=true --generate-alias-as-model",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
@@ -11,19 +12,25 @@
   "private": true,
   "packageManager": "npm@10.8.2",
   "dependencies": {
+    "@angular/cdk": "~21.2.0",
     "@angular/common": "^21.2.0",
     "@angular/compiler": "^21.2.0",
     "@angular/core": "^21.2.0",
     "@angular/forms": "^21.2.0",
+    "@angular/material": "^21.2.0",
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
+    "@ngxs/devtools-plugin": "21.0.0",
+    "@ngxs/router-plugin": "21.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@angular/build": "^21.2.1",
-    "@angular/cli": "^21.2.1",
+    "@angular/build": "^21.2.0",
+    "@angular/cli": "^21.2.0",
     "@angular/compiler-cli": "^21.2.0",
+    "@ngxs/store": "^21.0.0",
+    "@openapitools/openapi-generator-cli": "^2.30.2",
     "jsdom": "^28.0.0",
     "prettier": "^3.8.1",
     "typescript": "~5.9.2",
