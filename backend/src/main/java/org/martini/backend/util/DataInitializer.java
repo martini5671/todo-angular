@@ -34,7 +34,7 @@ public class DataInitializer implements CommandLineRunner {
     if (userRepository.count() == 0) {
       userRepository.save(
         User.builder()
-          .username("admin")
+          .username("admin@gmail.com")
           .userRoles(
             List.of(
               roleRepository.findByName("ROLE_ADMIN").orElseThrow()

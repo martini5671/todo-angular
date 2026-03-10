@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
+import {AuthState} from '../../state/auth.state';
+import {Store} from '@ngxs/store';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,4 +8,13 @@ import { Component } from '@angular/core';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard {}
+export class Dashboard implements OnInit{
+  private store = inject(Store)
+
+  ngOnInit() {
+    this.store.select(AuthState.getToken)
+      .subscribe(token => {
+        console.log('Token from state:', token);
+      });
+  }
+}
