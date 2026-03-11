@@ -29,8 +29,6 @@ export class AuthState {
       password: password
     }).pipe(
       tap(response => {
-        // TODO this doesnt work here... this is not pathing state at all, it just correctly processes
-        // http response status
         console.log('Login response:', response.token);
         ctx.patchState({ token: response.token });
       }),

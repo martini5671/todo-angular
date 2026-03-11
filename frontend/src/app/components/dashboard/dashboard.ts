@@ -8,7 +8,7 @@ import {Store} from '@ngxs/store';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard implements OnInit{
+export class Dashboard implements OnInit {
   private store = inject(Store)
 
   ngOnInit() {
