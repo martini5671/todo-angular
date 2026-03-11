@@ -16,6 +16,5 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideStore([AuthState], withNgxsReduxDevtoolsPlugin(), withNgxsRouterPlugin()),
     provideHttpClient(),
-    provideHotToastConfig(),
   ],
 };

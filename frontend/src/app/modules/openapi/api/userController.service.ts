@@ -17,9 +17,9 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { AuthenticationResponseDto } from '../model/authentication-response-dto';
+import { AuthenticationResponseDto } from '../model/authenticationResponseDto';
 // @ts-ignore
-import { LoginDto } from '../model/login-dto';
+import { LoginDto } from '../model/loginDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 import {
     UserControllerServiceInterface
-} from './user-controller.serviceInterface';
+} from './userController.serviceInterface';
 
 
 

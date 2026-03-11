@@ -1,4 +1,4 @@
-export * from './user-controller.service';
-import { UserControllerService } from './user-controller.service';
-export * from './user-controller.serviceInterface';
+export * from './userController.service';
+import { UserControllerService } from './userController.service';
+export * from './userController.serviceInterface';
 export const APIS = [UserControllerService];
