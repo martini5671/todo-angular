@@ -1,0 +1,8 @@
+<form>
+  <input [formField]="taskForm.name">
+  @if (!taskForm.name().valid()) {
+    <div>
+      name is required
+    </div>
+  }
+</form>

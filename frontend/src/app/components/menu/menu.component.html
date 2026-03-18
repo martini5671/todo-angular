@@ -9,9 +9,14 @@
   >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/login">Login</a>
-      <a mat-list-item href="#">Register</a>
-      <a mat-list-item (click)="logout()">Logout</a>
+      @if (token()) {
+        <a mat-list-item routerLink="/task-form">Task form</a>
+        <a mat-list-item (click)="logout()">Logout</a>
+      } @else {
+        <a mat-list-item routerLink="/login">Login</a>
+        <a mat-list-item href="#">Register</a>
+      }
+
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -21,6 +26,7 @@
       </button>
       <span>login</span>
     </mat-toolbar>
+    {{ token() }}
     <router-outlet/>
   </mat-sidenav-content>
 </mat-sidenav-container>

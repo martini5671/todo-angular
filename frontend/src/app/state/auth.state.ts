@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
-import {LoginAction} from './auth.actions';
-import {catchError, take, tap, throwError} from 'rxjs';
+import {LoginAction, LogoutAction} from './auth.actions';
+import {catchError, tap, throwError} from 'rxjs';
 import {UserControllerService} from '../modules/openapi';
 
 export interface AuthStateModel {
@@ -23,14 +23,14 @@ export class AuthState {
   }
 
   @Action(LoginAction)
-  login(ctx: StateContext<AuthStateModel>, { email, password }: LoginAction) {
+  login(ctx: StateContext<AuthStateModel>, {email, password}: LoginAction) {
     return this.userControllerService.login({
       username: email,
       password: password
     }).pipe(
       tap(response => {
         console.log('Login response:', response.token);
-        ctx.patchState({ token: response.token });
+        ctx.patchState({token: response.token});
       }),
       catchError(error => {
         console.error("Login failed", error);
@@ -38,4 +38,10 @@ export class AuthState {
       })
     );
   }
+
+  @Action(LogoutAction)
+  logout(ctx: StateContext<AuthStateModel>) {
+    ctx.patchState({token: null});
+  }
+
 }
