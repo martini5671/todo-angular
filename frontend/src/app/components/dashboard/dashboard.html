@@ -1,7 +1,4 @@
 <div>
-  <h2>dashboard with tasks: </h2>
-  @for (item of (tasks$ | async); track item.id) {
-    {{ item.title }}
-  }
-
+  <h2>Dashboard</h2>
+  <app-task-table></app-task-table>
 </div>
