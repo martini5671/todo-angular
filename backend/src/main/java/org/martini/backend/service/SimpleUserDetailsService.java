@@ -1,6 +1,7 @@
 package org.martini.backend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.martini.backend.model.dao.Role;
 import org.martini.backend.model.dao.User;
 import org.martini.backend.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

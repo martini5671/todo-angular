@@ -1,6 +1,7 @@
 package org.martini.backend.util;
 
 import lombok.RequiredArgsConstructor;
+import org.martini.backend.model.dao.Role;
 import org.martini.backend.model.dao.User;
 import org.martini.backend.model.dao.UserRole;
 import org.martini.backend.repository.RoleRepository;
@@ -26,12 +27,12 @@ public class DataInitializer implements CommandLineRunner {
     if (roleRepository.count() == 0) {
       roleRepository.saveAndFlush(
         UserRole.builder()
-          .name("ROLE_ADMIN")
+          .name(Role.ROLE_ADMIN.name())
           .build()
       );
       roleRepository.saveAndFlush(
         UserRole.builder()
-          .name("ROLE_USER")
+          .name(Role.ROLE_USER.name())
           .build()
       );
     }
@@ -42,7 +43,7 @@ public class DataInitializer implements CommandLineRunner {
           .username("admin@gmail.com")
           .userRoles(
             List.of(
-              roleRepository.findByName("ROLE_ADMIN").orElseThrow()
+              roleRepository.findByName(Role.ROLE_ADMIN.name()).orElseThrow()
             )
           )
           .password(passwordEncoder.encode("admin"))
@@ -53,7 +54,7 @@ public class DataInitializer implements CommandLineRunner {
           .username("user@gmail.com")
           .userRoles(
             List.of(
-              roleRepository.findByName("ROLE_USER").orElseThrow()
+              roleRepository.findByName(Role.ROLE_USER.name()).orElseThrow()
             )
           )
           .password(passwordEncoder.encode("user"))

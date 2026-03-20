@@ -2,6 +2,7 @@ package org.martini.backend.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.martini.backend.model.dao.Role;
 import org.martini.backend.model.dto.CreateTaskDto;
 import org.martini.backend.model.dto.TaskDto;
 import org.martini.backend.model.dto.UpdateTaskDto;
@@ -33,11 +34,11 @@ public class TaskController {
     public Page<TaskDto> getAllTasks(@RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "5") int size,
                                      Authentication authentication) {
-        return taskService.findAll(PageRequest.of(page, size), authentication.getName());
+        return taskService.findAll(PageRequest.of(page, size), authentication);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("@taskService.isOwner(#id, authentication.name)")
+    @PreAuthorize("hasRole('" + Role.Constants.ADMIN + "') or @taskService.isOwner(#id, authentication.name)")
     public TaskDto getTaskById(@PathVariable Long id) {
         return taskService.findById(id);
     }
@@ -49,7 +50,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("@taskService.isOwner(#id, authentication.name)")
+    @PreAuthorize("hasRole('" + Role.Constants.ADMIN + "') or @taskService.isOwner(#id, authentication.name)")
     public void updateTask(@PathVariable Long id, @RequestBody @Valid UpdateTaskDto taskDetails,
                            Authentication authentication) {
         taskService.update(id, taskDetails, authentication);
@@ -57,7 +58,7 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("@taskService.isOwner(#id, authentication.name)")
+    @PreAuthorize("hasRole('" + Role.Constants.ADMIN + "') or @taskService.isOwner(#id, authentication.name)")
     public void deleteTask(@PathVariable Long id) {
         taskService.delete(id);
     }

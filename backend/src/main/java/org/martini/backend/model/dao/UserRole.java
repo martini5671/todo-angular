@@ -30,6 +30,14 @@ public class UserRole {
     private Long id;
     @Column(nullable = false, unique = true)
     private String name;
+
+    public Role getRole() {
+        return Role.valueOf(name);
+    }
+
+    public void setRole(Role role) {
+        this.name = role.name();
+    }
     @ManyToMany(mappedBy = "userRoles")
     private List<User> users;
 

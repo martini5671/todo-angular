@@ -2,6 +2,7 @@ package org.martini.backend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.martini.backend.exception.ResourceNotFoundException;
+import org.martini.backend.model.dao.Role;
 import org.martini.backend.model.dao.Task;
 import org.martini.backend.model.dao.User;
 import org.martini.backend.model.dto.CreateTaskDto;
@@ -22,9 +23,17 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
-    public Page<TaskDto> findAll(PageRequest pageRequest, String username) {
-        return taskRepository.findAllByUserUsername(username, pageRequest)
-                .map(this::convertToDto);
+    public Page<TaskDto> findAll(PageRequest pageRequest, Authentication authentication) {
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .filter(grantedAuthority -> grantedAuthority.getAuthority() != null)
+                .anyMatch(a -> a.getAuthority().equals(Role.ROLE_ADMIN.name()));
+        if (isAdmin) {
+            return taskRepository.findAll(pageRequest)
+                    .map(this::convertToDto);
+        } else {
+            return taskRepository.findAllByUserUsername(authentication.getName(), pageRequest)
+                    .map(this::convertToDto);
+        }
     }
 
     public TaskDto findById(Long id) {
