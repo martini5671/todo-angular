@@ -24,4 +24,4 @@ auth:
   jwt-secret-key: gfsjhdgfhjsgfkjsagdjfgsdjfgsakjfg4234234h23j432h4j234jh23g4hjdsyusaufaugyfuds
 
 cors:
-  allowed-origins: http://localhost:4200
+  allowed-origins: http://localhost:4200,http://example.com

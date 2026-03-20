@@ -1,20 +1,30 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {AuthState} from '../../state/auth.state';
-import {Store} from '@ngxs/store';
+import { Component, inject, OnInit } from '@angular/core';
+import { TaskControllerService, TaskDto } from '../../modules/openapi';
+import {Observable, of, Subscribable, tap} from 'rxjs';
+import {map, catchError} from 'rxjs/operators';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css',
+  styleUrls: ['./dashboard.css'],
+  standalone: true,
+  imports: [AsyncPipe], // no NgFor needed for *ngFor
 })
 export class Dashboard implements OnInit {
-  private store = inject(Store)
+  private taskService = inject(TaskControllerService);
+
+  tasks$!: Observable<TaskDto[]>;
 
   ngOnInit() {
-    this.store.select(AuthState.getToken)
-      .subscribe(token => {
-        console.log('Token from state:', token);
-      });
+    this.tasks$ = this.taskService.getAllTasks(0, 10)
+      .pipe(
+        tap(page => console.log('Fetched tasks', page)),
+        map(page => page.content ?? []),
+        catchError(err => {
+          console.error('Error fetching tasks', err);
+          return of([]);
+        })
+      );
   }
 }

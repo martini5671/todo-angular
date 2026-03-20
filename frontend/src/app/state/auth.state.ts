@@ -6,11 +6,15 @@ import {UserControllerService} from '../modules/openapi';
 
 export interface AuthStateModel {
   token: string | null
+  roles: string[] | null
 }
 
 @State<AuthStateModel>({
   name: 'auth', // name of state slice
-  defaults: {token: null} // default value
+  defaults: {
+    token: null,
+    roles: null
+  } // default value
 })
 @Injectable() // dzieki temu sa się wstrzykiwać zależności
 export class AuthState {
@@ -22,6 +26,11 @@ export class AuthState {
     return state.token;
   }
 
+  @Selector()
+  static getRoles(state: AuthStateModel) {
+    return state.roles;
+  }
+
   @Action(LoginAction)
   login(ctx: StateContext<AuthStateModel>, {email, password}: LoginAction) {
     return this.userControllerService.login({
@@ -29,8 +38,7 @@ export class AuthState {
       password: password
     }).pipe(
       tap(response => {
-        console.log('Login response:', response.token);
-        ctx.patchState({token: response.token});
+        ctx.patchState({token: response.token, roles: response.roles});
       }),
       catchError(error => {
         console.error("Login failed", error);
@@ -41,7 +49,7 @@ export class AuthState {
 
   @Action(LogoutAction)
   logout(ctx: StateContext<AuthStateModel>) {
-    ctx.patchState({token: null});
+    ctx.patchState({token: null, roles: null});
   }
 
 }

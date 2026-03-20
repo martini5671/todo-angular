@@ -10,6 +10,7 @@ import org.martini.backend.service.TaskService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,14 +31,14 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<TaskDto> getAllTasks(@RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "5") int size,
                                      Authentication authentication) {
         return taskService.findAll(PageRequest.of(page, size), authentication);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value ="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('" + Role.Constants.ADMIN + "') or @taskService.isOwner(#id, authentication.name)")
     public TaskDto getTaskById(@PathVariable Long id) {
         return taskService.findById(id);

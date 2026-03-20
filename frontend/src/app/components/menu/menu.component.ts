@@ -8,7 +8,7 @@ import {MatListModule} from '@angular/material/list';
 import {MatIconModule} from '@angular/material/icon';
 import {Observable} from 'rxjs';
 import {map, shareReplay} from 'rxjs/operators';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import {select, Store} from '@ngxs/store';
 import {AuthState} from '../../state/auth.state';
 import {LogoutAction} from '../../state/auth.actions';
@@ -33,6 +33,7 @@ export class MenuComponent {
   private breakpointObserver = inject(BreakpointObserver);
   protected readonly token = select(AuthState.getToken);
   private store = inject(Store);
+  private router = inject(Router);
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map((result) => result.matches),
@@ -41,6 +42,7 @@ export class MenuComponent {
 
   protected logout() {
     this.store.dispatch(new LogoutAction());
+    void this.router.navigate(['/login']);
   }
 
   // TODO registration

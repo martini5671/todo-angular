@@ -3,6 +3,8 @@ README.md
 api.base.service.ts
 api.module.ts
 api/api.ts
+api/taskController.service.ts
+api/taskController.serviceInterface.ts
 api/userController.service.ts
 api/userController.serviceInterface.ts
 configuration.ts
@@ -10,8 +12,14 @@ encoder.ts
 git_push.sh
 index.ts
 model/authenticationResponseDto.ts
+model/createTaskDto.ts
 model/loginDto.ts
 model/models.ts
+model/pageTaskDto.ts
+model/pageableObject.ts
+model/sortObject.ts
+model/taskDto.ts
+model/updateTaskDto.ts
 ng-package.json
 package.json
 param.ts
