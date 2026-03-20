@@ -8,13 +8,17 @@ import { provideStore } from '@ngxs/store';
 import { AuthState } from './state/auth.state';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHotToastConfig } from '@ngxpert/hot-toast';
+import {withNgxsStoragePlugin} from '@ngxs/storage-plugin';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHotToastConfig(), // @ngxpert/hot-toast providers
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideStore([AuthState], withNgxsReduxDevtoolsPlugin(), withNgxsRouterPlugin()),
+    provideStore([AuthState], withNgxsReduxDevtoolsPlugin(), withNgxsRouterPlugin(),
+      withNgxsStoragePlugin({
+        keys: ['auth'] // this can be * to persits everything in local storage this can also be state class
+      })),
     provideHttpClient(),
   ],
 };

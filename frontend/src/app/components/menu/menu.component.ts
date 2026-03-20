@@ -27,6 +27,7 @@ import {LogoutAction} from '../../state/auth.actions';
     RouterOutlet,
     RouterLink,
   ],
+  standalone: true
 })
 export class MenuComponent {
   private breakpointObserver = inject(BreakpointObserver);

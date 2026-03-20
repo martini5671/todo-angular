@@ -25,6 +25,7 @@ import {AuthState} from '../../state/auth.state';
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',
+  standalone: true
 })
 export class Login {
 
