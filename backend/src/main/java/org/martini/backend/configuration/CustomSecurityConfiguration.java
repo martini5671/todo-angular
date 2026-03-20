@@ -1,7 +1,6 @@
 package org.martini.backend.configuration;
 
 import lombok.RequiredArgsConstructor;
-import org.martini.backend.service.SimpleUserDetailsService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
