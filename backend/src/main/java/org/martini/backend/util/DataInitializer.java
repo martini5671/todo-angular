@@ -29,6 +29,11 @@ public class DataInitializer implements CommandLineRunner {
           .name("ROLE_ADMIN")
           .build()
       );
+      roleRepository.saveAndFlush(
+        UserRole.builder()
+          .name("ROLE_USER")
+          .build()
+      );
     }
 
     if (userRepository.count() == 0) {
@@ -41,6 +46,17 @@ public class DataInitializer implements CommandLineRunner {
             )
           )
           .password(passwordEncoder.encode("admin"))
+          .build()
+      );
+      userRepository.save(
+        User.builder()
+          .username("user@gmail.com")
+          .userRoles(
+            List.of(
+              roleRepository.findByName("ROLE_USER").orElseThrow()
+            )
+          )
+          .password(passwordEncoder.encode("user"))
           .build()
       );
     }

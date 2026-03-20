@@ -22,7 +22,6 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -47,6 +46,8 @@ public class User {
     @ToString.Exclude
     private List<UserRole> userRoles;
 
+    @OneToMany(mappedBy="user")
+    private List<Task> tasks;
 
     @Override
     public boolean equals(Object o) {
@@ -58,5 +59,13 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, username);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "username = " + username + ", " +
+                "password = " + password + ")";
     }
 }
