@@ -1,10 +1,33 @@
 <div>
-  <mat-form-field>
-    <mat-label>Input</mat-label>
-    <input matInput>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Textarea</mat-label>
-    <textarea matInput></textarea>
-  </mat-form-field>
+  <h2>Add new task</h2>
+  <form class="form-container" (submit)="onSubmit($event)">
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input matInput [formField]="taskForm.title">
+    </mat-form-field>
+    @if (taskForm.title().touched() && taskForm.title().invalid()) {
+      <mat-error>
+        @for (error of taskForm.title().errors(); track error.kind) {
+          <span>{{ error.message }}</span>
+        }
+      </mat-error>
+    }
+
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea [formField]="taskForm.description" matInput></textarea>
+    </mat-form-field>
+    @if (taskForm.description().errors()) {
+      <mat-error>
+        @for (error of taskForm.description().errors(); track error.kind) {
+          <span>{{ error.message }}</span>
+        }
+      </mat-error>
+    }
+    <button matButton="outlined"
+            [disabled]="taskForm().invalid()"
+            type="submit">
+      Add task
+    </button>
+  </form>
 </div>
