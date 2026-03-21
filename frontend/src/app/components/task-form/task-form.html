@@ -1,8 +1,10 @@
-<form>
-  <input [formField]="taskForm.name">
-  @if (!taskForm.name().valid()) {
-    <div>
-      name is required
-    </div>
-  }
-</form>
+<div>
+  <mat-form-field>
+    <mat-label>Input</mat-label>
+    <input matInput>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Textarea</mat-label>
+    <textarea matInput></textarea>
+  </mat-form-field>
+</div>
