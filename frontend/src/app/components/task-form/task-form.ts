@@ -4,6 +4,7 @@ import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/inpu
 import {MatButton} from '@angular/material/button';
 import {TaskControllerService} from '../../modules/openapi';
 import {catchError, of, tap} from 'rxjs';
+import {HotToastService} from '@ngxpert/hot-toast';
 
 @Component({
   selector: 'app-task-form',
@@ -21,6 +22,7 @@ import {catchError, of, tap} from 'rxjs';
 export class TaskForm {
 
   private taskService = inject(TaskControllerService)
+  private toaster = inject(HotToastService);
 
   private taskModel = signal({
     title: "",
@@ -34,7 +36,6 @@ export class TaskForm {
       maxLength(model.description, 50, {message: 'Maximum 50 characters'});
     });
 
-
   protected onSubmit(event: SubmitEvent) {
     event.preventDefault();
 
@@ -43,9 +44,13 @@ export class TaskForm {
       description: this.taskForm.description().value(),
     })
       .pipe(
-        tap(() => {console.log("created task")}),
+        tap(() => {
+          this.toaster.success('Task Created');
+          this.taskModel.set({title: "", description: ""});
+        }),
         catchError(err => {
           console.error(err);
+          this.toaster.error(err.message);
           return of(null);
         })
       )

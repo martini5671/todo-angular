@@ -10,6 +10,7 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       @if (token()) {
+        <a mat-list-item routerLink="/dashboard">Dashboard</a>
         <a mat-list-item routerLink="/task-form">Task form</a>
         <a mat-list-item (click)="logout()">Logout</a>
       } @else {
