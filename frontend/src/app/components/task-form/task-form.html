@@ -1,5 +1,5 @@
 <div>
-  <h2>Add new task</h2>
+  <h2>{{ isEditMode ? 'Edit task' : 'Add new task' }}</h2>
   <form class="form-container" (submit)="onSubmit($event)">
     <mat-form-field>
       <mat-label>Title</mat-label>
@@ -24,10 +24,20 @@
         }
       </mat-error>
     }
-    <button matButton="outlined"
+
+    @if (isEditMode) {
+      <div class="checkbox-container">
+        <mat-checkbox [formField]="taskForm.done">
+          Done
+        </mat-checkbox>
+      </div>
+    }
+
+    <button
             [disabled]="taskForm().invalid()"
+            matButton="outlined"
             type="submit">
-      Add task
+      {{ isEditMode ? 'Update task' : 'Add task' }}
     </button>
   </form>
 </div>
