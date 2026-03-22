@@ -35,5 +35,10 @@ auth:
   verification-token-expiration-minutes: 15
   jwt-secret-key: gfsjhdgfhjsgfkjsagdjfgsdjfgsakjfg4234234h23j432h4j234jh23g4hjdsyusaufaugyfuds
 
+email:
+  retry:
+    max-attempts: 5
+    interval-minutes: 5
+
 cors:
   allowed-origins: http://localhost:4200,http://example.com
