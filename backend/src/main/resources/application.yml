@@ -15,6 +15,17 @@ spring:
       hibernate:
         format_sql: true # pretty-print SQL
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: garcinbronczot@gmail.com
+    password: cwjb sfve oyem swxk
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
   flyway:
     enabled: true       # disable Flyway completely
