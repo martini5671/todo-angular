@@ -8,7 +8,6 @@ import {catchError, of, tap} from 'rxjs';
 import {HotToastService} from '@ngxpert/hot-toast';
 import {ActivatedRoute} from '@angular/router';
 import {MatButton} from '@angular/material/button';
-import {FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-task-form',
@@ -79,7 +78,7 @@ export class TaskForm implements OnInit {
     this.taskService.updateTask(this.taskId!, taskData)
       .pipe(
         tap(() => {
-          this.toaster.success('Task created!');
+          this.toaster.success('Task updated!');
         }),
         catchError(err => {
           console.log(err)

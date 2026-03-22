@@ -1,9 +1,12 @@
-import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
-import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
-import { TaskControllerService, TaskDto } from '../../modules/openapi';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import {AfterViewInit, Component, inject, ViewChild} from '@angular/core';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {TaskControllerService, TaskDto} from '../../modules/openapi';
+import {catchError, filter, map, startWith, switchMap} from 'rxjs/operators';
+import {of} from 'rxjs';
+import {Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {RemoveTaskDialog} from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-task-table',
@@ -13,11 +16,15 @@ import { of } from 'rxjs';
   imports: [MatTableModule, MatPaginatorModule],
 })
 export class TaskTableComponent implements AfterViewInit {
+
   private taskService = inject(TaskControllerService);
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   dataSource = new MatTableDataSource<TaskDto>();
-  displayedColumns = ['id', 'title', 'description', 'done'];
+  displayedColumns = ['id', 'title', 'description', 'done', 'actions'];
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -45,5 +52,21 @@ export class TaskTableComponent implements AfterViewInit {
         })
       )
       .subscribe(data => (this.dataSource.data = data));
+  }
+
+  protected handleTaskEdition(id: number) {
+    void this.router.navigate(['/task-form/edit/', id]);
+  }
+
+  protected handleTaskRemoval(id: number) {
+    this.dialog.open(RemoveTaskDialog, {data: {taskId: id}})
+      .afterClosed() // emits: true / false / undefined
+      .pipe(
+        filter(result => result === true),
+        switchMap(() => this.taskService.deleteTask(id))
+      )
+      .subscribe(() => {
+        console.log('task deleted successfully.');
+      })
   }
 }
