@@ -1,7 +1,9 @@
 package org.martini.backend.model;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 
+@Builder
 public record EmailDto(
         @NotBlank
         String from,

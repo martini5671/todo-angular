@@ -2,13 +2,16 @@ package org.martini.backend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.martini.backend.exception.UserAlreadyExistsException;
+import org.martini.backend.event.UserRegisteredEvent;
 import org.martini.backend.model.dao.Role;
 import org.martini.backend.model.dao.User;
+import org.martini.backend.model.dao.VerificationToken;
 import org.martini.backend.model.dto.AuthenticationResponseDto;
 import org.martini.backend.model.dto.LoginDto;
 import org.martini.backend.model.dto.RegistrationDto;
 import org.martini.backend.repository.RoleRepository;
 import org.martini.backend.repository.UserRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,6 +32,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final VerificationTokenService verificationTokenService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public AuthenticationResponseDto login(LoginDto loginDTO) {
@@ -66,6 +70,10 @@ public class UserService {
                 .isEnabled(false)
                 .build());
 
-        verificationTokenService.createToken(user);
+        VerificationToken token = verificationTokenService.createToken(user);
+        eventPublisher.publishEvent(UserRegisteredEvent.builder()
+                .email(user.getUsername())
+                .token(token.getToken())
+                .build());
     }
 }

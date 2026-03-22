@@ -22,7 +22,7 @@ public class VerificationTokenService {
     private int expirationMinutes;
 
     @Transactional
-    public void createToken(User user) {
+    public VerificationToken createToken(User user) {
         String token = UUID.randomUUID().toString();
 
         verificationTokenRepository.findByUser(user)
@@ -34,7 +34,7 @@ public class VerificationTokenService {
                 .expiryDate(LocalDateTime.now().plusMinutes(expirationMinutes))
                 .build();
 
-        verificationTokenRepository.save(verificationToken);
+       return verificationTokenRepository.save(verificationToken);
     }
 
     public boolean isTokenValid(String token) {
