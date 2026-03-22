@@ -21,6 +21,7 @@ spring:
 
 auth:
   token-expiration-hours: 1
+  verification-token-expiration-minutes: 15
   jwt-secret-key: gfsjhdgfhjsgfkjsagdjfgsdjfgsakjfg4234234h23j432h4j234jh23g4hjdsyusaufaugyfuds
 
 cors:

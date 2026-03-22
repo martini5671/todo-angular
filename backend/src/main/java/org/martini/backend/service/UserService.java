@@ -28,6 +28,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final VerificationTokenService verificationTokenService;
 
     @Transactional
     public AuthenticationResponseDto login(LoginDto loginDTO) {
@@ -55,7 +56,7 @@ public class UserService {
         if (userRepository.existsByUsername(registrationDto.email())) {
             throw new UserAlreadyExistsException();
         }
-        userRepository.save(User.builder()
+        User user = userRepository.save(User.builder()
                 .userRoles(List.of(
                         roleRepository.findByName(Role.ROLE_USER.getName())
                                 .orElseThrow()
@@ -64,5 +65,7 @@ public class UserService {
                 .password(passwordEncoder.encode(registrationDto.password()))
                 .isEnabled(false)
                 .build());
+
+        verificationTokenService.createToken(user);
     }
 }
