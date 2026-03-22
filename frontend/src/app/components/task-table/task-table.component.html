@@ -28,8 +28,8 @@
       <th mat-header-cell *matHeaderCellDef >Actions</th>
       <td mat-cell *matCellDef="let row">
         <div class="actions-container">
-          <button (click)="handleTaskEdition(row.id)">Edit</button>
-          <button (click)="handleTaskRemoval(row.id)">Delete</button>
+          <button matButton="outlined" (click)="handleTaskEdition(row.id)">Edit</button>
+          <button color="warn" matButton="outlined" (click)="handleTaskRemoval(row.id)">Delete</button>
         </div>
       </td>
     </ng-container>

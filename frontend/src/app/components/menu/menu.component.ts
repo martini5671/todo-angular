@@ -45,6 +45,4 @@ export class MenuComponent {
     void this.router.navigate(['/login']);
   }
 
-  // TODO registration
-
 }

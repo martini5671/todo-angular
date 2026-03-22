@@ -6,7 +6,7 @@ import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
 import {CreateTaskDto, TaskControllerService, UpdateTaskDto} from '../../modules/openapi';
 import {catchError, of, tap} from 'rxjs';
 import {HotToastService} from '@ngxpert/hot-toast';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MatButton} from '@angular/material/button';
 
 @Component({
@@ -30,6 +30,7 @@ export class TaskForm implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   protected isEditMode = false;
   private taskId: number | undefined;
+  private router = inject(Router);
 
   ngOnInit() {
     this.taskId = Number(this.activatedRoute.snapshot.paramMap.get('id'));
@@ -79,6 +80,7 @@ export class TaskForm implements OnInit {
       .pipe(
         tap(() => {
           this.toaster.success('Task updated!');
+          void this.router.navigate(['/dashboard']);
         }),
         catchError(err => {
           console.log(err)

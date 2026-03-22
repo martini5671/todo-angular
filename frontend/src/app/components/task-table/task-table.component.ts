@@ -3,23 +3,25 @@ import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {TaskControllerService, TaskDto} from '../../modules/openapi';
 import {catchError, filter, map, startWith, switchMap} from 'rxjs/operators';
-import {of} from 'rxjs';
+import {merge, of, Subject} from 'rxjs';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {RemoveTaskDialog} from '../dialog/dialog.component';
+import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-task-table',
   templateUrl: './task-table.component.html',
   styleUrl: './task-table.component.css',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule],
+  imports: [MatTableModule, MatPaginatorModule, MatButton],
 })
 export class TaskTableComponent implements AfterViewInit {
 
   private taskService = inject(TaskControllerService);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private refresh$: Subject<void> = new Subject<void>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -33,7 +35,7 @@ export class TaskTableComponent implements AfterViewInit {
     // Load data initially and whenever the page changes
     // exposes a stream of page change events (EventEmitter<PageEvent>).
     // Every time the user clicks next page, previous page, or changes page size, this emits an event.
-    this.paginator.page
+      merge(this.paginator.page, this.refresh$)
       .pipe(
         startWith({}), // trigger initial load This is what triggers the first load of data, before the user even clicks anything.
         switchMap(() => {
@@ -58,15 +60,20 @@ export class TaskTableComponent implements AfterViewInit {
     void this.router.navigate(['/task-form/edit/', id]);
   }
 
+  private refreshTaskTable() {
+    this.refresh$.next();
+  }
+
   protected handleTaskRemoval(id: number) {
     this.dialog.open(RemoveTaskDialog, {data: {taskId: id}})
       .afterClosed() // emits: true / false / undefined
       .pipe(
         filter(result => result === true),
         switchMap(() => this.taskService.deleteTask(id))
+        // switch values and cancel previous observable
       )
       .subscribe(() => {
-        console.log('task deleted successfully.');
+        this.refreshTaskTable();
       })
   }
 }
