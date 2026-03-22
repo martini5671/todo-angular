@@ -6,6 +6,9 @@ import {MatInput} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
 import {Router, RouterLink} from '@angular/router';
 import {HotToastService} from '@ngxpert/hot-toast';
+import {UserControllerService} from '../../modules/openapi';
+import {catchError, EMPTY, tap} from 'rxjs';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -30,6 +33,7 @@ export class RegisterComponent {
   private router = inject(Router);
   private toaster = inject(HotToastService);
   private fb = inject(FormBuilder);
+  private userService = inject(UserControllerService)
 
   protected registerForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -48,17 +52,24 @@ export class RegisterComponent {
       return;
     }
 
-    // This is a stub for registration logic.
-    // The user will connect it to the backend.
-    const {email, password} = this.registerForm.value;
-    console.log('Registering user:', {email, password});
-
-    this.toaster.info('Registration logic not yet implemented. Connecting to backend...');
-
-    // Simulate successful registration
-    setTimeout(() => {
-      this.toaster.success('Registration successful! Please log in.');
-      void this.router.navigate(['/login']);
-    }, 1000);
+    this.userService.register({
+      email: this.registerForm.value.email!,
+      password: this.registerForm.value.password!
+    }).pipe(
+      tap(() => {
+        this.toaster.success("New account was registered. " +
+          "Please check email box to finalize");
+      }),
+      catchError(error => {
+        console.log(error)
+        if (error instanceof HttpErrorResponse) {
+          if (error.status === 409) {
+            this.toaster.error("Provided email already exists");
+          }
+        }
+        return EMPTY;
+      })
+    )
+      .subscribe()
   }
 }

@@ -13,6 +13,7 @@ import { Observable }                                        from 'rxjs';
 
 import { AuthenticationResponseDto } from '../model/models';
 import { LoginDto } from '../model/models';
+import { RegistrationDto } from '../model/models';
 
 
 import { Configuration }                                     from '../configuration';
@@ -30,5 +31,13 @@ export interface UserControllerServiceInterface {
      * @param loginDto 
      */
     login(loginDto: LoginDto, extraHttpRequestParams?: any): Observable<AuthenticationResponseDto>;
+
+    /**
+     * 
+     * 
+     * @endpoint post /api/v1/users/registration
+     * @param registrationDto 
+     */
+    register(registrationDto: RegistrationDto, extraHttpRequestParams?: any): Observable<{}>;
 
 }

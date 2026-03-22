@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.martini.backend.model.dto.AuthenticationResponseDto;
 import org.martini.backend.model.dto.LoginDto;
+import org.martini.backend.model.dto.RegistrationDto;
 import org.martini.backend.service.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,4 +23,11 @@ public class UserController {
     public AuthenticationResponseDto login(@RequestBody @Valid LoginDto loginDto) {
         return userService.login(loginDto);
     }
+
+    @PostMapping("/registration")
+    public void register(@RequestBody @Valid RegistrationDto registrationDto) {
+        userService.register(registrationDto);
+    }
+
+
 }

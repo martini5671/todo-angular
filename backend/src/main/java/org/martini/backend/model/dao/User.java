@@ -37,6 +37,8 @@ public class User {
     private String username;
     @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
+    private boolean isEnabled;
 
     @JoinTable(
             name = "user_roles",

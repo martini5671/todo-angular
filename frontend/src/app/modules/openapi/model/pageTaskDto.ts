@@ -13,16 +13,16 @@ import { TaskDto } from './taskDto';
 
 
 export interface PageTaskDto { 
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: Array<TaskDto>;
     number?: number;
     first?: boolean;
     last?: boolean;
     numberOfElements?: number;
-    pageable?: PageableObject;
     sort?: SortObject;
+    pageable?: PageableObject;
     empty?: boolean;
 }
 

@@ -23,11 +23,15 @@ public class SimpleUserDetailsService implements UserDetailsService {
       .orElseThrow(() -> new UsernameNotFoundException("No user with username " + username +
         " was found"));
     return new org.springframework.security.core.userdetails.User(
-      username,
-      user.getPassword(),
-      user.getUserRoles().stream()
-        .map(userRole -> new SimpleGrantedAuthority(userRole.getName()))
-        .toList()
+            username,
+            user.getPassword(),
+            user.isEnabled(),  // ✅ your flag
+            true,              // accountNonExpired
+            true,              // credentialsNonExpired
+            true,              // accountNonLocked
+            user.getUserRoles().stream()
+                    .map(userRole -> new SimpleGrantedAuthority(userRole.getName()))
+                    .toList()
     );
 
   }

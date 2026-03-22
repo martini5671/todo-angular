@@ -46,9 +46,7 @@ public class CustomSecurityConfiguration {
                         auth -> auth
                                 .requestMatchers(
                                         "/api/v1/users/login",
-                                        "/api/v1/users/passwords/reset-request",
-                                        "/api/v1/users/passwords/validate-password-reset-token",
-                                        "/api/v1/users/passwords/reset-confirmation",
+                                        "/api/v1/users/registration",
                                         // Swagger / OpenAPI
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
