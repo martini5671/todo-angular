@@ -2,12 +2,13 @@ import {Component, inject, OnInit, signal} from '@angular/core';
 import {form, FormField, maxLength, minLength, required} from '@angular/forms/signals';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {MatInput} from '@angular/material/input';
-import {MatFormField, MatLabel, MatError} from '@angular/material/form-field';
-import {TaskControllerService} from '../../modules/openapi';
+import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
+import {CreateTaskDto, TaskControllerService, UpdateTaskDto} from '../../modules/openapi';
 import {catchError, of, tap} from 'rxjs';
 import {HotToastService} from '@ngxpert/hot-toast';
 import {ActivatedRoute} from '@angular/router';
 import {MatButton} from '@angular/material/button';
+import {FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-task-form',
@@ -29,20 +30,20 @@ export class TaskForm implements OnInit {
   private toaster = inject(HotToastService);
   private activatedRoute = inject(ActivatedRoute);
   protected isEditMode = false;
+  private taskId: number | undefined;
 
   ngOnInit() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.isEditMode = !!id;
-    if (id) {
-      this.loadTask(Number(id));
+    this.taskId = Number(this.activatedRoute.snapshot.paramMap.get('id'));
+    if(this.taskId){
+      this.isEditMode = true;
+      this.loadTask(this.taskId);
     }
   }
 
   private taskModel = signal({
     title: "",
     description: "",
-    done: false,
-    userId: undefined as number | undefined
+    done: false
   });
 
   protected taskForm = form(this.taskModel,
@@ -52,42 +53,45 @@ export class TaskForm implements OnInit {
       maxLength(model.description, 50, {message: 'Maximum 50 characters'});
     });
 
-  protected onSubmit(event: SubmitEvent) {
-    event.preventDefault();
-
-    const taskData: any = {
-      title: this.taskForm.title().value(),
+  private createTask = () => {
+    const taskData: CreateTaskDto = {
       description: this.taskForm.description().value(),
-    };
-
-    if (this.isEditMode) {
-      taskData.done = this.taskForm.done().value();
+      title: this.taskForm.title().value()
     }
-
-    const request$ = this.isEditMode
-      ? this.taskService.updateTask(Number(this.activatedRoute.snapshot.paramMap.get('id')), taskData)
-      : this.taskService.createTask(taskData);
-
-    request$
+    this.taskService.createTask(taskData)
       .pipe(
         tap(() => {
-          this.toaster.success(this.isEditMode ? 'Task Updated' : 'Task Created');
-          if (!this.isEditMode) {
-            this.taskModel.set({
-              title: "",
-              description: "",
-              done: false,
-              userId: undefined
-            });
-          }
+          this.toaster.success('Task created!');
         }),
         catchError(err => {
-          console.error(err);
-          this.toaster.error(err.message);
+          console.log(err)
           return of(null);
         })
       )
       .subscribe();
+  }
+  private updateTask = () => {
+    const taskData: UpdateTaskDto = {
+      title: this.taskForm.title().value(),
+      description: this.taskForm.description().value(),
+      done: this.taskForm.done().value(),
+    }
+    this.taskService.updateTask(this.taskId!, taskData)
+      .pipe(
+        tap(() => {
+          this.toaster.success('Task created!');
+        }),
+        catchError(err => {
+          console.log(err)
+          return of(null);
+        })
+      )
+      .subscribe();
+  }
+
+  protected onSubmit(event: SubmitEvent) {
+    event.preventDefault();
+    this.isEditMode ? this.updateTask() : this.createTask();
   }
 
   private loadTask(id: number) {
@@ -96,9 +100,8 @@ export class TaskForm implements OnInit {
         tap(task => {
           this.taskModel.set({
             title: task.title,
-            description: task.description || "",
-            done: task.done || false,
-            userId: task.userId
+            description: task.description ? task.description : "",
+            done: task.done
           });
         }),
         catchError(err => {

@@ -10,10 +10,10 @@
 
 
 export interface TaskDto { 
-    id?: number;
+    id: number;
     title: string;
-    description: string;
-    done?: boolean;
-    userId?: number;
+    description?: string;
+    done: boolean;
+    userId: number;
 }
 
