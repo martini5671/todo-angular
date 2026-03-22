@@ -1,0 +1,61 @@
+<div class="register-container">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <div class="centered-header">
+        <h2>Register</h2>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="registerForm" (ngSubmit) ="onSubmit()">
+        <div class="form-content-container">
+          <mat-form-field class="register-form-field" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email" placeholder="Ex. pat@example.com">
+            @if (registerForm.get('email')?.hasError('required')) {
+              <mat-error>Email is required</mat-error>
+            }
+            @if (registerForm.get('email')?.hasError('email')) {
+              <mat-error>Please enter a valid email address</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field class="register-form-field" appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" type="password">
+            @if (registerForm.get('password')?.hasError('required')) {
+              <mat-error>Password is required</mat-error>
+            }
+            @if (registerForm.get('password')?.hasError('minlength')) {
+              <mat-error>Password must be at least 6 characters long</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field class="register-form-field" appearance="outline">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput formControlName="confirmPassword" type="password">
+            @if (registerForm.get('confirmPassword')?.hasError('required')) {
+              <mat-error>Confirm password is required</mat-error>
+            }
+            @if (registerForm.hasError('notSame')) {
+              <mat-error>Passwords do not match</mat-error>
+            }
+          </mat-form-field>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            style="margin-top: 20px"
+            [disabled]="registerForm.invalid"
+          >
+            Register
+          </button>
+
+          <div class="actions">
+            <a mat-button routerLink="/login">Already have an account? Login</a>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

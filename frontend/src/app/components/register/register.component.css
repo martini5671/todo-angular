@@ -1,0 +1,26 @@
+.form-content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-form-field {
+  width: 90%;
+}
+
+.centered-header {
+  width: 100%;
+  text-align: center;
+}
+
+.register-container {
+  padding-top: 20px;
+  margin: auto;
+  width: 25%;
+  min-width: 250px;
+}
+
+.actions {
+  margin-top: 10px;
+}
