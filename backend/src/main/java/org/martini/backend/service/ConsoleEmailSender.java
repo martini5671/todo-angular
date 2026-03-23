@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@Profile({"dev"})
+@Profile({"dev", "default"})
 public class ConsoleEmailSender implements EmailSender {
     @Override
     public void sendMail(EmailDto emailDto) {
