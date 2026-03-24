@@ -1,16 +1,19 @@
 package org.martini.backend.service;
 
 import lombok.RequiredArgsConstructor;
-import org.martini.backend.exception.UserAlreadyExistsException;
 import org.martini.backend.event.UserRegisteredEvent;
+import org.martini.backend.exception.InvalidTokenException;
+import org.martini.backend.exception.UserAlreadyExistsException;
 import org.martini.backend.model.dao.Role;
 import org.martini.backend.model.dao.User;
 import org.martini.backend.model.dao.VerificationToken;
 import org.martini.backend.model.dto.AuthenticationResponseDto;
 import org.martini.backend.model.dto.LoginDto;
 import org.martini.backend.model.dto.RegistrationDto;
+import org.martini.backend.model.dto.RegistrationVerificationDto;
 import org.martini.backend.repository.RoleRepository;
 import org.martini.backend.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +29,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
+    @Value("${registration.base-url}")
+    private String baseUrl;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
@@ -70,10 +75,22 @@ public class UserService {
                 .isEnabled(false)
                 .build());
 
-        VerificationToken token = verificationTokenService.createToken(user);
+        VerificationToken token = verificationTokenService.createVerificationTokenForUser(user);
         eventPublisher.publishEvent(UserRegisteredEvent.builder()
                 .email(user.getUsername())
-                .token(token.getToken())
+                .link(baseUrl + token.getToken())
                 .build());
+    }
+
+    @Transactional
+    public void verifyRegistration(RegistrationVerificationDto dto) {
+        if (verificationTokenService.isTokenValid(dto.token())) {
+            var verificationToken = verificationTokenService.findVerificationTokenByTokenValue(dto.token());
+            User userAssignedToToken = verificationToken.getUser();
+            userAssignedToToken.setEnabled(true);
+            userRepository.save(userAssignedToToken);
+        } else {
+            throw new InvalidTokenException();
+        }
     }
 }

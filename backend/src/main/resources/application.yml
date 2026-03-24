@@ -42,3 +42,6 @@ email:
 
 cors:
   allowed-origins: http://localhost:4200,http://example.com
+
+registration:
+  base-url: http://localhost:4200/login?token=

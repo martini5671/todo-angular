@@ -4,6 +4,7 @@ export * from './loginDto';
 export * from './pageTaskDto';
 export * from './pageableObject';
 export * from './registrationDto';
+export * from './registrationVerificationDto';
 export * from './sortObject';
 export * from './taskDto';
 export * from './updateTaskDto';

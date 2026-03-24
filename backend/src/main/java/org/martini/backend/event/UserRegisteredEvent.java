@@ -3,5 +3,5 @@ package org.martini.backend.event;
 import lombok.Builder;
 
 @Builder
-public record UserRegisteredEvent(String token, String email) {
+public record UserRegisteredEvent(String link, String email) {
 }

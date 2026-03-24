@@ -14,6 +14,7 @@ import { Observable }                                        from 'rxjs';
 import { AuthenticationResponseDto } from '../model/models';
 import { LoginDto } from '../model/models';
 import { RegistrationDto } from '../model/models';
+import { RegistrationVerificationDto } from '../model/models';
 
 
 import { Configuration }                                     from '../configuration';
@@ -39,5 +40,13 @@ export interface UserControllerServiceInterface {
      * @param registrationDto 
      */
     register(registrationDto: RegistrationDto, extraHttpRequestParams?: any): Observable<{}>;
+
+    /**
+     * 
+     * 
+     * @endpoint post /api/v1/users/registration-verification
+     * @param registrationVerificationDto 
+     */
+    verifyRegistration(registrationVerificationDto: RegistrationVerificationDto, extraHttpRequestParams?: any): Observable<{}>;
 
 }

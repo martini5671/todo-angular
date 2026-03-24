@@ -47,6 +47,7 @@ public class CustomSecurityConfiguration {
                                 .requestMatchers(
                                         "/api/v1/users/login",
                                         "/api/v1/users/registration",
+                                        "/api/v1/users/registration-verification",
                                         // Swagger / OpenAPI
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",

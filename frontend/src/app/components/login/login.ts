@@ -1,14 +1,17 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatCard, MatCardContent, MatCardHeader} from '@angular/material/card';
 import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngxs/store';
 import {LoginAction} from '../../state/auth.actions';
 import {HotToastService} from '@ngxpert/hot-toast';
 import {AuthState} from '../../state/auth.state';
+import {UserControllerService} from '../../modules/openapi';
+import {catchError, EMPTY, tap} from 'rxjs';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -27,12 +30,37 @@ import {AuthState} from '../../state/auth.state';
   styleUrl: './login.css',
   standalone: true
 })
-export class Login {
+export class Login implements OnInit{
 
   private router = inject(Router);
   private toaster = inject(HotToastService);
   private fb = inject(FormBuilder)
   private store = inject(Store)
+  private currentRoute = inject(ActivatedRoute);
+  private userService = inject(UserControllerService)
+
+  ngOnInit(): void {
+    this.currentRoute.queryParams.subscribe(params => {
+      const token = params['token'];
+      if (token) {
+        this.userService.verifyRegistration({ token })
+          .pipe(
+            tap(() => {
+              this.toaster.success("Your account was registered successfully. Please try to login.");
+            }),
+            catchError((error: HttpErrorResponse) => {
+              if (error.status === 400) {
+                this.toaster.error("Invalid or expired token.");
+              } else {
+                this.toaster.error("Something went wrong. Please try again.");
+              }
+              return EMPTY;
+            })
+          )
+          .subscribe();
+      }
+    });
+  }
 
   protected loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],

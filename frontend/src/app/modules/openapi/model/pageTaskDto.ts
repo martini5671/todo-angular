@@ -18,11 +18,11 @@ export interface PageTaskDto {
     size?: number;
     content?: Array<TaskDto>;
     number?: number;
+    pageable?: PageableObject;
+    sort?: SortObject;
     first?: boolean;
     last?: boolean;
     numberOfElements?: number;
-    sort?: SortObject;
-    pageable?: PageableObject;
     empty?: boolean;
 }
 

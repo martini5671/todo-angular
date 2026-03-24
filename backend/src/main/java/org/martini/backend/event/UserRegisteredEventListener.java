@@ -21,8 +21,8 @@ public class UserRegisteredEventListener {
     public void handleUserRegisteredEvent(UserRegisteredEvent event) {
 
         String subject = "Registration Confirmation";
-        String content = "Thank you for registering. Please use the following token to verify your account: "
-                + event.token();
+        String content = "Thank you for registering. Please click following link to verify your account: "
+                + event.link();
 
         emailQueueRepository.save(
                 EmailQueue.builder()

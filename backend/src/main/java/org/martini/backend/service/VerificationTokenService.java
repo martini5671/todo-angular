@@ -1,6 +1,7 @@
 package org.martini.backend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.martini.backend.exception.ResourceNotFoundException;
 import org.martini.backend.model.dao.User;
 import org.martini.backend.model.dao.VerificationToken;
 import org.martini.backend.repository.VerificationTokenRepository;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,7 +22,7 @@ public class VerificationTokenService {
     private int expirationMinutes;
 
     @Transactional
-    public VerificationToken createToken(User user) {
+    public VerificationToken createVerificationTokenForUser(User user) {
         String token = UUID.randomUUID().toString();
 
         verificationTokenRepository.findByUser(user)
@@ -34,7 +34,7 @@ public class VerificationTokenService {
                 .expiryDate(LocalDateTime.now().plusMinutes(expirationMinutes))
                 .build();
 
-       return verificationTokenRepository.save(verificationToken);
+        return verificationTokenRepository.save(verificationToken);
     }
 
     public boolean isTokenValid(String token) {
@@ -43,8 +43,20 @@ public class VerificationTokenService {
                 .orElse(false);
     }
 
-    @Transactional
+    public VerificationToken findVerificationTokenByTokenValue(String tokenValue) {
+        return verificationTokenRepository.findByToken(tokenValue)
+                .orElseThrow(() -> new ResourceNotFoundException("no such token exists"));
+    }
+
+    public void saveToken(VerificationToken token) {
+        verificationTokenRepository.save(token);
+    }
+
     public void deleteExpiredTokens() {
         verificationTokenRepository.deleteAllByExpiryDateBefore(LocalDateTime.now());
+    }
+
+    public long countExpiredTokens() {
+       return verificationTokenRepository.countByExpiryDateBefore(LocalDateTime.now());
     }
 }

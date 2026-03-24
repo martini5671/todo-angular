@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.martini.backend.model.dto.AuthenticationResponseDto;
 import org.martini.backend.model.dto.LoginDto;
 import org.martini.backend.model.dto.RegistrationDto;
+import org.martini.backend.model.dto.RegistrationVerificationDto;
 import org.martini.backend.service.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,5 +30,9 @@ public class UserController {
         userService.register(registrationDto);
     }
 
+    @PostMapping("/registration-verification")
+    public void verifyRegistration(@RequestBody RegistrationVerificationDto dto) {
+        userService.verifyRegistration(dto);
+    }
 
 }

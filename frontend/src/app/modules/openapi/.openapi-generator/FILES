@@ -18,6 +18,7 @@ model/models.ts
 model/pageTaskDto.ts
 model/pageableObject.ts
 model/registrationDto.ts
+model/registrationVerificationDto.ts
 model/sortObject.ts
 model/taskDto.ts
 model/updateTaskDto.ts
