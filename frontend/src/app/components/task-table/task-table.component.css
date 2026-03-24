@@ -1,8 +1,17 @@
 .full-width-table {
   width: 100%;
 }
-.actions-container{
+
+.actions-container {
   display: flex;
   flex-direction: row;
   gap: 1rem;
+}
+
+.mat-mdc-row:nth-child(odd) {
+  background-color: #ececec !important;
+}
+.mat-mdc-header-row{
+  background-color: #445381 !important;
+  color: white;
 }

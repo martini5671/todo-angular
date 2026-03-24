@@ -48,10 +48,6 @@ public class VerificationTokenService {
                 .orElseThrow(() -> new ResourceNotFoundException("no such token exists"));
     }
 
-    public void saveToken(VerificationToken token) {
-        verificationTokenRepository.save(token);
-    }
-
     public void deleteExpiredTokens() {
         verificationTokenRepository.deleteAllByExpiryDateBefore(LocalDateTime.now());
     }

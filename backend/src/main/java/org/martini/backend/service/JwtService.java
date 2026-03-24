@@ -23,8 +23,8 @@ public class JwtService {
   private static final String ROLES_CLAIM_NAME = "roles";
   private JWTVerifier verifier;
 
-  @Value("${auth.token-expiration-hours}")
-  private int expirationHours;
+  @Value("${auth.token-expiration-minutes}")
+  private int expirationMinutes;
 
   @Value("${auth.jwt-secret-key}")
   private String secret;
@@ -45,7 +45,7 @@ public class JwtService {
       .withSubject(SUBJECT)
       .withClaim(USERNAME_CLAIM_NAME, username)
       .withIssuedAt(new Date())
-      .withExpiresAt(Instant.now().plus(Duration.ofHours(expirationHours)))
+      .withExpiresAt(Instant.now().plus(Duration.ofMinutes(expirationMinutes)))
       .withIssuer(ISSUER)
       .withClaim(ROLES_CLAIM_NAME, roles)
       .sign(Algorithm.HMAC256(secret));
@@ -54,11 +54,6 @@ public class JwtService {
   public String getUsername(String token) {
     return verifier.verify(token)
       .getClaim(USERNAME_CLAIM_NAME).asString();
-  }
-
-  public List<String> getRoles(String token) {
-    return verifier.verify(token).getClaim(ROLES_CLAIM_NAME)
-      .asList(String.class);
   }
 
 }
